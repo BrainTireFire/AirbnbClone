@@ -1,16 +1,22 @@
 import { View } from "react-native";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Stack } from "expo-router";
 import ExploreHeader from "@/components/ExploreHeader";
 import Listing from "@/components/Listing";
 import listingData from "@/assets/data/airbnb-listings.json";
 
 const Page = () => {
-  const [category, setCategory] = React.useState<string>("Tiny homes");
+  const [category, setCategory] = useState<string>("Tiny homes");
+  const [isOnRight, seIsOnRight] = useState<boolean>(false);
   const items = useMemo(() => listingData as any, []);
 
-  const onDataChanged = (category: string) => {
+  const onDataChanged = (
+    category: string,
+    previousIndex: number,
+    currentIndex: number
+  ) => {
     setCategory(category);
+    seIsOnRight(previousIndex < currentIndex);
   };
 
   return (
@@ -20,7 +26,7 @@ const Page = () => {
           header: () => <ExploreHeader onCategoryChanged={onDataChanged} />,
         }}
       />
-      <Listing listings={items} category={category} />
+      <Listing listings={items} category={category} isOnRight={isOnRight} />
     </View>
   );
 };

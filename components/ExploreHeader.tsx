@@ -44,7 +44,11 @@ const categories = [
 ];
 
 type ExploreHeaderProps = {
-  onCategoryChanged: (category: string) => void;
+  onCategoryChanged: (
+    category: string,
+    previousIndex: number,
+    currentIndex: number
+  ) => void;
 };
 
 const ExploreHeader = ({ onCategoryChanged }: ExploreHeaderProps) => {
@@ -53,6 +57,7 @@ const ExploreHeader = ({ onCategoryChanged }: ExploreHeaderProps) => {
   const [activeIndex, setActiveIndex] = React.useState(0);
 
   const selectCategory = (index: number) => {
+    const previousIndex = activeIndex;
     const selected = itemsRef.current[index];
     setActiveIndex(index);
 
@@ -65,7 +70,7 @@ const ExploreHeader = ({ onCategoryChanged }: ExploreHeaderProps) => {
     });
 
     Heptics.impactAsync(Heptics.ImpactFeedbackStyle.Light);
-    onCategoryChanged(categories[index].name);
+    onCategoryChanged(categories[index].name, previousIndex, index);
   };
 
   return (
