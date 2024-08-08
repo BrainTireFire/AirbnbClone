@@ -9,6 +9,7 @@ import * as SecureStore from "expo-secure-store";
 import { TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -64,12 +65,14 @@ export default function RootLayout() {
   }
 
   return (
-    <ClerkProvider
-      publishableKey={CLERK_PUBLISHABLE_KEY!}
-      tokenCache={tokenCache}
-    >
-      <RootLayoutNav />
-    </ClerkProvider>
+    <GestureHandlerRootView>
+      <ClerkProvider
+        publishableKey={CLERK_PUBLISHABLE_KEY!}
+        tokenCache={tokenCache}
+      >
+        <RootLayoutNav />
+      </ClerkProvider>
+    </GestureHandlerRootView>
   );
 }
 
