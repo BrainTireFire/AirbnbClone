@@ -18,16 +18,21 @@ import Animated, {
   FadeOutLeft,
   FadeOutRight,
 } from "react-native-reanimated";
+import {
+  BottomSheetFlatList,
+  BottomSheetFlatListMethods,
+} from "@gorhom/bottom-sheet";
 
 type ListingProps = {
   listings: any[];
   category: string;
   isOnRight: boolean;
+  refresh: number;
 };
 
-const Listing = ({ listings, category, isOnRight }: ListingProps) => {
+const Listing = ({ listings, category, isOnRight, refresh }: ListingProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const listRef = useRef<FlatList | null>(null);
+  const listRef = useRef<BottomSheetFlatListMethods | null>(null);
 
   useEffect(() => {
     setIsLoading(true);
@@ -36,6 +41,12 @@ const Listing = ({ listings, category, isOnRight }: ListingProps) => {
       setIsLoading(false);
     }, 200);
   }, [category, isOnRight]);
+
+  useEffect(() => {
+    if (refresh) {
+      listRef.current?.scrollToOffset({ offset: 0, animated: true });
+    }
+  }, [refresh]);
 
   const renderItem: ListRenderItem<ListingType> = ({ item }) => (
     <Link href={`/listing/${item.id}`} asChild>
@@ -83,10 +94,13 @@ const Listing = ({ listings, category, isOnRight }: ListingProps) => {
 
   return (
     <View style={defaultStyles.container}>
-      <FlatList
+      <BottomSheetFlatList
         renderItem={renderItem}
         ref={listRef}
         data={isLoading ? [] : listings}
+        ListHeaderComponent={
+          <Text style={styles.info}>{listings.length} homes</Text>
+        }
       />
     </View>
   );
@@ -102,6 +116,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
     borderRadius: 10,
+  },
+  info: {
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginTop: 4,
   },
 });
 

@@ -1,5 +1,5 @@
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState } from "react";
 import BottomSheet from "@gorhom/bottom-sheet";
 import Listing from "./Listing";
 import Colors from "@/constants/Colors";
@@ -12,10 +12,14 @@ interface Props {
 }
 
 const ListingsBottomSheet = ({ listings, category, isOnRight }: Props) => {
+  const [refresh, setRefresh] = useState<number>(0);
   const bottomSheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["10%", "100%"], []);
 
-  const showMap = () => {};
+  const showMap = () => {
+    bottomSheetRef.current?.collapse();
+    setRefresh(refresh + 1);
+  };
 
   return (
     <BottomSheet
@@ -24,12 +28,14 @@ const ListingsBottomSheet = ({ listings, category, isOnRight }: Props) => {
       snapPoints={snapPoints}
       handleIndicatorStyle={{ backgroundColor: Colors.grey }}
       enablePanDownToClose={false}
+      style={styles.sheetContainer}
     >
       <View style={styles.contentContainer}>
         <Listing
           listings={listings}
           category={category}
           isOnRight={isOnRight}
+          refresh={refresh}
         />
         <View style={styles.absoluteView}>
           <TouchableOpacity style={styles.btn} onPress={showMap}>
@@ -61,7 +67,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 8,
   },
-  sheetContainer: {},
+  sheetContainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    shadowOffset: {
+      width: 1,
+      height: 1,
+    },
+  },
 });
 
 export default ListingsBottomSheet;

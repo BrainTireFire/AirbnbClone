@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { Marker, PROVIDER_GOOGLE, Circle } from "react-native-maps";
 import { defaultStyles } from "@/constants/Styles";
 import { ListingGeo } from "@/types/listingGeo";
@@ -20,7 +20,7 @@ const INITAIL_REGION = {
   longitudeDelta: 0.0421,
 };
 
-const ListingsMap = ({ listings }: ListingsMapProps) => {
+const ListingsMap = memo(({ listings }: ListingsMapProps) => {
   const router = useRouter();
   const mapRef = useRef<any>(null);
   const [currentLocation, setCurrentLocation] = useState<any>(null);
@@ -123,7 +123,7 @@ const ListingsMap = ({ listings }: ListingsMapProps) => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

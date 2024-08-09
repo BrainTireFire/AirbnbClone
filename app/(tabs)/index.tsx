@@ -11,6 +11,7 @@ const Page = () => {
   const [category, setCategory] = useState<string>("Tiny homes");
   const [isOnRight, seIsOnRight] = useState<boolean>(false);
   const items = useMemo(() => listingData as any, []);
+  const geoItems = useMemo(() => listingDataGeo as any, []);
 
   const onDataChanged = (
     category: string,
@@ -22,13 +23,13 @@ const Page = () => {
   };
 
   return (
-    <View style={{ flex: 1, marginTop: 130 }}>
+    <View style={{ flex: 1, marginTop: 80 }}>
       <Stack.Screen
         options={{
           header: () => <ExploreHeader onCategoryChanged={onDataChanged} />,
         }}
       />
-      <ListingsMap listings={listingDataGeo} />
+      <ListingsMap listings={geoItems} />
       <ListingBottomSheet
         listings={items}
         category={category}
